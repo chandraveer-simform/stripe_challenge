@@ -13,7 +13,6 @@ const RegistrationForm = (props) => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState(''); 
   const [customer_id,  setCustomer_id] = useState('')
-  const [pId, setPId] = useState('')
   const [thankYou, setThankYou] = useState(true)
 
   const { selected, details } = props;
@@ -30,7 +29,6 @@ const RegistrationForm = (props) => {
  
     const res = await axios.get('http://localhost:4242/schedule-lesson');
     setCustomer_id(res.data['customer_id']);
-    console.log("CS ID",res.data['customer_id']);
     const clientSecret = res.data['client_secret']; 
     const result = await stripe.confirmCardSetup(clientSecret, {
       payment_method: {
@@ -95,7 +93,7 @@ const RegistrationForm = (props) => {
             role="alert"
             hidden
           >
-            A customer with the email address of {setCustomer_id}
+            A customer with the email address of {customer_id}
             <span id="error_msg_customer_email"></span> already exists. If you'd
             like to update the card on file, please visit
             <span id="account_link"></span>.

@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
  
 // parse application/json
 app.use(bodyParser.json())
-app.use(cors())
+app.use(cors()) 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -18,11 +18,14 @@ app.use(function(req, res, next) {
   next();
 });
 
-const stripe = require('stripe')('sk_test_5L5PmnUzR3JGy4hQ2aeYbFyr00g5UlrayT');
-// const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 const { resolve } = require("path");
+
 // Replace if using a different env file or config
 const env = require("dotenv").config({ path: "./.env" });
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+ 
+
 const allitems = {};
 
 // const MIN_ITEMS_FOR_DISCOUNT = 2;
@@ -84,17 +87,9 @@ app.get("/", (req, res) => {
 // Challenge section 1: shows the concert tickets page. 
 app.post('/create-checkout-session', async (req, res) => {
     const domainURL = process.env.WEBDOMAIN;  
-    const { quantity, locale } = req.body;
-    // Create new Checkout Session for the order
-    // Other optional params include:
-    // [billing_address_collection] - to display billing address details on the page
-    // [customer] - if you have an existing Stripe Customer ID
-    // [payment_intent_data] - lets capture the payment later
-    // [customer_email] - lets you prefill the email input in the form
-    // For full details see https://stripe.com/docs/api/checkout/sessions/create
+    const { quantity } = req.body; 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      // locale: locale,
+      payment_method_types: ['card'], 
       line_items: [
         {
           name: 'Spring Academy Concert',
@@ -152,17 +147,14 @@ app.get("/concert-success", (req, res) => {
 app.post("/pay", async (req, res) =>{
   
   const {email} = req.body;
-  const {amount} = req.body;
-  console.log("amount",amount)
+  const {amount} = req.body; 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: amount,
     currency: 'usd',
-    // customer: customer,
     metadata: {integration_check: 'accept_a_payment'},
     receipt_email: email,
   });
-  
-  // res.json({'client_secret': paymentIntent['client_secret']})
+   
   
   res.end( JSON.stringify({'client_secret': paymentIntent['client_secret']}));
   
@@ -264,7 +256,6 @@ app.get('/schedule-lesson', async (req, res) => {
   const intent =  await stripe.setupIntents.create({
     customer: customer.id,
   });
-  // res.end('card_wallet', { client_secret: intent.client_secret });
   res.end( JSON.stringify({'client_secret': intent['client_secret'], 'customer_id':customer.id}));
 });
 

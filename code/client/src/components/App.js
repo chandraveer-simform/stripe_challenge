@@ -12,6 +12,8 @@ import AccountUpdate from "../pages/AccountUpdate";
 
 import "../css/normalize.scss";
 
+ 
+
 const App = () => {
   return (
     <React.StrictMode>

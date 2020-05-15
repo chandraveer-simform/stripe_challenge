@@ -5,13 +5,12 @@ import PaymentForm from "./PaymentForm";
 // Stripe
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
-
+ 
 const stripePromise = loadStripe("pk_test_UFotfrDpP2sD8r2oxEasfn9m00ztbWZRMX");
 
 const SummaryTable = (props) => {
   const { discountFactor, minItemsForDiscount, items, order } = props;
-  var itemdata;
-  console.log("Item",props.items)
+  var itemdata; 
 
   //Return array of selected items
   var getSelectedItems = () => {
